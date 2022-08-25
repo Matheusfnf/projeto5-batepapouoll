@@ -1,0 +1,107 @@
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+
+.main {
+    max-width: 375px;
+    height: 667px;
+    background-color: #F3F3F3;
+    margin: 0 auto;
+    
+}
+
+.topo {
+    height: 106px;
+    background-color: rgb(238, 232, 232);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logouol {
+    width: 75px;
+    height: 53px;
+    margin-left: 15px;
+}
+
+.grouplogo {
+    width: 45px;
+    height: 45px;
+    margin-right: 15px;
+}
+
+.chatbox{
+    height: 483px;
+    background-color: #E5E5E5;
+    font-size: 14px;
+    overflow: scroll;
+    
+    
+}
+.mensagem-entra-e-sai-da-sala{
+    height: 40px;
+    background-color: #DCDCDC;
+    display: flex;
+    align-items: center;
+
+}
+
+.mensagem-geral{
+    height: 40px;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    align-items: center;
+    
+}
+
+.mensagem-reservada{
+    height: 40px;
+    background-color: #FFDEDE;
+    display: flex;
+    align-items: center;
+    
+}
+
+.enviar-mensagem-box {
+    height: 78px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.enviar-mensagem-box p {
+    margin-left: 15px;
+}
+
+.enviar-mensagem-box img {
+    width: 26px;
+    height: 26px;
+    margin-right: 15px;
+}
+
+.status {
+    background-color: #DCDCDC;
+    padding: 8px;
+}
+
+.message {
+    background-color: #FFFFFF;
+    padding: 8px;
+}
+
+.reserved {
+    background: #FFDEDE;
+    padding: 8px;
+}
+
+.enviar-mensagem-box textarea:focus, input:focus, select:focus {
+    box-shadow: 0 0 0 0;
+    border: 0 none;
+    outline: 0;
+    border-color: #FFFFFF;
+} 
