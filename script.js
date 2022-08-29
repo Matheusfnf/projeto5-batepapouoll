@@ -26,7 +26,7 @@ function renderizarMensagens() {
     child = ul.lastElementChild;
   }
 
-  mensagens.map((i) => {
+  mensagens.map((i) => {    
     const li = document.createElement("li");
 
     if (i.type == "status") {
@@ -48,7 +48,7 @@ function renderizarMensagens() {
     }
 
     if (i.type == "private_message") {
-      if (i.to == nome || i.to == "Todos") {
+      if (i.to == nome) {
         li.classList.add("reserved");
         li.innerHTML = `
         <span> (${i.time}) </span>
@@ -57,7 +57,6 @@ function renderizarMensagens() {
         ${i.text}
                     `;
       }
-      return;
     }
     ul.appendChild(li);
   });
@@ -70,7 +69,8 @@ async function postMessage() {
     const input = document.querySelector(".enviar-mensagem");
     const text = input.value;
     input.value = "";
-
+    
+    console.log("cliquei");
     const response = await axios.post(
       "https://mock-api.driven.com.br/api/v6/uol/messages",
 
@@ -82,6 +82,7 @@ async function postMessage() {
       }
     );
     pegarDados();
+
   } catch (e) {
     deuErro(e);
   }
