@@ -1,5 +1,8 @@
 let mensagens = [];
 
+const nome = prompt("Qual seu nome?");
+if (!nome) window.location.reload();
+
 async function pegarDados() {
   const promessa = axios.get(
     "https://mock-api.driven.com.br/api/v6/uol/messages"
@@ -12,28 +15,52 @@ pegarDados();
 function dadosChegaram(resposta) {
   mensagens = resposta.data;
   renderizarMensagens();
-  
 }
 
 function renderizarMensagens() {
   const ul = document.querySelector(".mensagens");
 
-  for (let i of mensagens) {
-    const li = document.createElement("li");
-    li.innerHTML = `
-    ${i.time}
-    ${i.from} para
-    ${i.to} :
-    ${i.text}
-                `;
-    
-    if (i.type == "status") li.classList.add("status");
-    if (i.type == "message") li.classList.add("message");
-    if (i.type == "private_message") li.classList.add("reserved");
-    ul.appendChild(li);
-    
+  let child = ul.lastElementChild;
+  while (child) {
+    ul.removeChild(child);
+    child = ul.lastElementChild;
   }
- 
+
+  mensagens.map((i) => {
+    const li = document.createElement("li");
+
+    if (i.type == "status") {
+      li.classList.add("status");
+      li.innerHTML = `
+      <span> (${i.time}) </span>
+      <strong>${i.from}</strong> ${i.text}
+                  `;
+    }
+
+    if (i.type == "message") {
+      li.classList.add("message");
+      li.innerHTML = `
+      <span> (${i.time}) </span>
+      <strong>${i.from}</strong> para
+      ${i.to} :
+      ${i.text}
+                  `;
+    }
+
+    if (i.type == "private_message") {
+      if (i.to == nome || i.to == "Todos") {
+        li.classList.add("reserved");
+        li.innerHTML = `
+        <span> (${i.time}) </span>
+        <strong>${i.from}</strong> reservadamente para
+        <strong>${i.to} </strong>:
+        ${i.text}
+                    `;
+      }
+      return;
+    }
+    ul.appendChild(li);
+  });
 }
 
 renderizarMensagens();
@@ -42,19 +69,21 @@ async function postMessage() {
   try {
     const input = document.querySelector(".enviar-mensagem");
     const text = input.value;
-    
+    input.value = "";
+
     const response = await axios.post(
       "https://mock-api.driven.com.br/api/v6/uol/messages",
+
       {
-        from: "testezimdocria1949",
+        from: nome,
         to: "Todos",
         text,
-        type: "message", // ou "private_message" para o bônus
+        type: "message",
       }
     );
     pegarDados();
   } catch (e) {
-    console.log(e);
+    deuErro(e);
   }
 }
 
@@ -67,23 +96,33 @@ function entrarNaSala() {
   const promise = axios.post(
     "https://mock-api.driven.com.br/api/v6/uol/participants",
     {
-      name: "testezimdocria1949",
+      name: nome,
     }
   );
   promise.then((e) => console.log(e));
-//   promise.catch((e) => console.log( e));
+  promise.catch((e) => deuErro(e));
 }
 entrarNaSala();
 
 async function manterConexao() {
   await axios.post("https://mock-api.driven.com.br/api/v6/uol/status", {
-    name: "testezimdocria1949",
+    name: nome,
   });
-}
-setInterval(manterConexao, 5000);
 
-function ultimamsg(){
-const li = document.querySelector('.li')
-var lastChild = li.lastChild
-lastChild.scrollIntoView()
+  pegarDados();
+  ultimamsg();
+}
+setInterval(manterConexao, 3000);
+
+function ultimamsg() {
+  const li = document.querySelector("ul");
+  let lastChild = li.lastChild;
+  lastChild.scrollIntoView({ behavior: "smooth" });
+}
+
+function deuErro(erro) {
+  if (erro.response.status === 400) {
+    alert("Nome já existente!");
+    window.location.reload();
+  }
 }
